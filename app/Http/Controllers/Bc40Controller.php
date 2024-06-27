@@ -17,7 +17,9 @@ class Bc40Controller extends Controller
 
     public  function browse()
     {
-        return view('browse');
+        $bc40 = Bc40::orderBy('nomor_bc40', 'desc')->get();
+
+        return view('browse', compact('bc40'));
     }
 
     public function index()
@@ -28,13 +30,32 @@ class Bc40Controller extends Controller
     public function import(Bc40Request $bc40)
     {
         try {
-            Excel::import(new BC40Import, $bc40->file('file'));
+            $importer = new BC40Import;
+
+            Excel::import($importer, $bc40->file('file'));
+
+            $duplicateErrors = $importer->getDuplicateErrors();
+
+            if (!empty($duplicateErrors)) {
+                session()->flash('error', count($duplicateErrors) - 1 . ' baris sudah ada.');
+                $response = array_slice($duplicateErrors, 0, -1);
+
+                return redirect()->back()->withErrors($response);
+            }
 
             return back()->with('success', 'Excel Data Imported successfully.');
-        } catch (\Illuminate\Database\QueryException $e) {
-            return back()->withErrors([
-                'message' => $e->getMessage(),
-            ]);
+        } catch (\Exception $e) {
+            $link = '<a href="' . route('download_template') . '" class="btn btn-outline-primary mt-3">Download Template</a>';
+            session()->flash(
+                'error',
+                'Ops, terjadi kesalahan. <b><small>Sepertinya format data tidak sesuai.</small></b> ' . $link
+            );
+            return redirect()->back();
         }
+    }
+
+    public function download_template()
+    {
+        return response()->download(public_path('template_format.xlsx'));
     }
 }

@@ -18,16 +18,6 @@ class Bc40 extends Model
     {
         parent::boot();
 
-        static::creating(function ($model) {
-            $lastModel = static::orderBy('id', 'desc')->first() ?? static::orderBy('nomor_bc40', 'desc')->first();
-            if ($lastModel) {
-                $number = intval(substr($lastModel->nomor_bc40, -5)) + 1;
-                $model->nomor_bc40 = str_pad($number, 5, '0', STR_PAD_LEFT);
-            } else {
-                $model->nomor_bc40 = '00001';
-            }
-        });
-
         static::updated(function ($bc40) {
             $bc40->edits()->create([
                 'id_users' => Auth::id(),
