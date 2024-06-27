@@ -6,6 +6,14 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12">
+                            <button type="button" class="btn btn-sm btn-danger rounded-circle" id="reset-button"
+                                style="display: none;color: #fff;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <div id="border" class="d-flex justify-content-center bg-light mb-3">
+                                <img src="" alt="Excel Thumbnail" id="file-thumbnail" style="display: none;"
+                                    width="100px">
+                            </div>
                             <form action="{{ route('bc40-import') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="d-flex justify-content-between gap-2">
@@ -14,7 +22,8 @@
                                             Select file
                                         </span>
                                         <i class="fas fa-upload"></i>
-                                        <input type="file" accept=".xlsx" class="file-upload" name="file" />
+                                        <input type="file" accept=".xlsx" class="file-upload" name="file"
+                                            id="file-input" />
                                     </div>
                                     <div>
                                         <button class="btn btn-md btn-primary" type="submit">Upload</button>
@@ -56,4 +65,35 @@
             @endif
         </div>
     </div>
+    <script>
+        document.getElementById('file-input').addEventListener('change', function() {
+            var file = this.files[0];
+            var thumbnail = document.getElementById('file-thumbnail');
+            var resetButton = document.getElementById('reset-button');
+            var border = document.getElementById('border');
+
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    thumbnail.src = "{{ asset('excel-logo.png') }}";
+                    thumbnail.style.display = 'inline-block';
+                    resetButton.style.display = 'inline-block';
+                    border.classList.add('border');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                thumbnail.src = "";
+                thumbnail.style.display = 'none';
+                resetButton.style.display = 'none';
+            }
+        });
+
+        document.getElementById('reset-button').addEventListener('click', function() {
+            var fileInput = document.getElementById('file-input');
+            fileInput.value = '';
+            document.getElementById('file-thumbnail').src = '';
+            document.getElementById('file-thumbnail').style.display = 'none';
+            this.style.display = 'none';
+        });
+    </script>
 @endsection
