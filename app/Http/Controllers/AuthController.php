@@ -10,7 +10,6 @@ class AuthController extends Controller
 {
     public  function index()
     {
-
     }
 
     public function login(Request $request)
@@ -25,20 +24,22 @@ class AuthController extends Controller
 
             if ($user && $user->password === md5($request->password)) {
                 Auth::login($user);
-                return redirect()->route('bc40-index');
+                return redirect()->route('dashboard');
             } else {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Invalid credentials'
-                ], 401);
+                return redirect()->route('auth-login')->with('error', 'Invalid credentials');
             }
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'An error occurred during login',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->route('auth-login')->withErrors([
+                'message' => 'An error occurred during login', 'error' => $e->getMessage()
+            ]);
         }
     }
 
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()->route('login');
+    }
 }

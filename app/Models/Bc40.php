@@ -11,15 +11,22 @@ class Bc40 extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nomor_bc40', 'tanggal_bc40', 'npwp_pengusaha', 'nama_pengusaha',
-        'npwp_pengirim', 'nama_pengirim', 'nomor_aju', 'kode_kantor',
-        'kode_barang', 'uraian_barang', 'harga_penyerahan', 'kadar_final', 'keterangan'
-    ];
+    protected $guarded = ['id'];
+    protected $table = 'bc40_import';
 
     public static function boot(): void
     {
         parent::boot();
+
+        static::creating(function ($model) {
+            $lastModel = static::orderBy('id', 'desc')->first() ?? static::orderBy('nomor_bc40', 'desc')->first();
+            if ($lastModel) {
+                $number = intval(substr($lastModel->nomor_bc40, -5)) + 1;
+                $model->nomor_bc40 = str_pad($number, 5, '0', STR_PAD_LEFT);
+            } else {
+                $model->nomor_bc40 = '00001';
+            }
+        });
 
         static::updated(function ($bc40) {
             $bc40->edits()->create([

@@ -10,6 +10,15 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class Bc40Controller extends Controller
 {
+    public  function dashboard()
+    {
+        return view('dashboard');
+    }
+
+    public  function browse()
+    {
+        return view('browse');
+    }
 
     public function index()
     {
@@ -19,14 +28,11 @@ class Bc40Controller extends Controller
     public function import(Bc40Request $bc40)
     {
         try {
-            Excel::import(new Bc40Import($bc40), request()->file('file'));
+            Excel::import(new BC40Import, $bc40->file('file'));
 
-            return response()->json([
-                'success' => true,
-            ]);
+            return back()->with('success', 'Excel Data Imported successfully.');
         } catch (\Illuminate\Database\QueryException $e) {
-            return response()->json([
-                'success' => false,
+            return back()->withErrors([
                 'message' => $e->getMessage(),
             ]);
         }
