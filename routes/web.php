@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('login');
-})->name('login');
+})->middleware('guest')->name('login');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/auth/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth-logout');
@@ -19,4 +19,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/bc40-export', [Bc40Controller::class, 'export'])->name('bc40-export');
 });
 
-Route::post('auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('auth-login');
+Route::post('auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware('guest')->name('auth-login');
