@@ -34,7 +34,7 @@ class BC40Import implements ToModel, WithHeadingRow
         ]);
 
         $validator = Validator::make($row, [
-            'nomor_bc40' => Rule::unique(Bc40::class, 'nomor_bc40'),
+            'nomor_bc40' => ['required', Rule::unique(Bc40::class, 'nomor_bc40')]
         ]);
 
         if ($validator->fails()) {

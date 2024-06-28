@@ -15,7 +15,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/download_template', [Bc40Controller::class, 'download_template'])->name('download_template');
     Route::get('/browse', [Bc40Controller::class, 'browse'])->name('bc40-browse');
 
-    Route::post('/bc40-import', [\App\Http\Controllers\Bc40Controller::class, 'import'])->name('bc40-import');
+    Route::post('/bc40-import', [Bc40Controller::class, 'import'])->name('bc40-import');
+    Route::post('/bc40-export', [Bc40Controller::class, 'export'])->name('bc40-export');
 });
 
 Route::post('auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->name('auth-login');

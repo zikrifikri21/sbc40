@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BC40Export;
 use App\Http\Requests\Bc40Request;
 use App\Imports\BC40Import;
 use App\Models\Bc40;
@@ -12,7 +13,11 @@ class Bc40Controller extends Controller
 {
     public  function dashboard()
     {
-        return view('dashboard');
+        $bc40 = Bc40::orderBy('nomor_bc40', 'desc')->get();
+
+        $count = count($bc40);
+
+        return view('dashboard', compact('bc40', 'count'));
     }
 
     public  function browse()
@@ -52,6 +57,11 @@ class Bc40Controller extends Controller
             );
             return redirect()->back();
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new BC40Export, 'bc40_export.xlsx');
     }
 
     public function download_template()

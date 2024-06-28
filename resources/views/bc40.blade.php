@@ -1,7 +1,7 @@
 @extends('template.app')
 @section('content')
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="card shadow mb-4">
                 <div class="card-body">
                     <div class="row">
@@ -17,7 +17,7 @@
                             <form action="{{ route('bc40-import') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="d-flex justify-content-between gap-2">
-                                    <div class="file btn btn-md btn-primary">
+                                    <div class="file btn btn-md btn-success">
                                         <span>
                                             Select file
                                         </span>
@@ -32,6 +32,13 @@
                             </form>
                         </div>
                         <div class="col-md-12 mt-3">
+                            <div class="alert alert-warning">
+                                <p class="mb-0">Perhatian :</p>
+                                <p>Pastikan mendownload template file terlebih dahulu sebelum mengupload file BC40 ke dalam
+                                    aplikasi</p>
+                                <p>sesuaikan format file sesuai template yg di siapkan agar proses upload berjalan normal
+                                </p>
+                            </div>
                             @if (session('success'))
                                 <div class="alert alert-success">{{ session('success') }}</div>
                             @endif
@@ -43,7 +50,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-8">
             @if ($errors->any())
                 <div class="card shadow mb-4">
                     <a href="#collapse" class="d-block card-header py-3" data-toggle="collapse" role="button"
