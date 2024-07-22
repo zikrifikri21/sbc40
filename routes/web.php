@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Bc40Controller;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 Route::get('/', function () {
     return view('login');
@@ -25,3 +27,15 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::post('auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware('guest')->name('auth-login');
+Route::get('/login', function () {
+    $token = request('token');
+    if ($token) {
+        list($user_id, $timestamp) = explode(':', base64_decode($token));
+        $user = User::find($user_id);
+        if ($user) {
+            Auth::login($user);
+            return redirect('/dashboard');
+        }
+    }
+    return redirect('http://localhost:8080/sikimon_r/Home')->with('error', 'Invalid login token.');
+});

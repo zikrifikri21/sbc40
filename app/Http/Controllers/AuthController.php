@@ -40,6 +40,6 @@ class AuthController extends Controller
     {
         Auth::logout();
 
-        return redirect()->route('login');
+        return redirect('http://localhost:8080/sikimon_r/Home');
     }
 }
