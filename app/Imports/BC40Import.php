@@ -31,6 +31,7 @@ class BC40Import implements ToModel, WithHeadingRow
             'harga_penyerahan' => $row['harga_penyerahan'],
             'kadar_final' => $row['kadar_final'],
             'keterangan' => $row['14'],
+            'id_users' => auth()->user()->id_users
         ]);
 
         $validator = Validator::make($row, [
