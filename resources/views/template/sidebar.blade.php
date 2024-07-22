@@ -10,22 +10,26 @@
 
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
-
+    @php
+        $level = Auth::user()->user_level->id_user_level;
+    @endphp
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="{{route('dashboard')}}">
+        <a class="nav-link" href="{{ route('dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span>
         </a>
     </li>
+    @if ($level == 13 || $level == 15 || $level == 17 || $level == 18)
+        <li class="nav-item active">
+            <a class="nav-link" href="{{ route('bc40-index') }}">
+                <i class="fas fa-fw fa-file-import"></i>
+                <span>Import File</span>
+            </a>
+        </li>
+    @endif
     <li class="nav-item active">
-        <a class="nav-link" href="{{route('bc40-index')}}">
-            <i class="fas fa-fw fa-file-import"></i>
-            <span>Import File</span>
-        </a>
-    </li>
-    <li class="nav-item active">
-        <a class="nav-link" href="{{route('bc40-browse')}}">
+        <a class="nav-link" href="{{ route('bc40-browse') }}">
             <i class="fas fa-fw fa-globe"></i>
             <span>Browse</span>
         </a>
@@ -41,4 +45,3 @@
 
 
 </ul>
-
