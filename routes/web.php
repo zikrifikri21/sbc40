@@ -14,7 +14,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/dashboard', [Bc40Controller::class, 'dashboard'])->name('dashboard');
     Route::get('/browse', [Bc40Controller::class, 'browse'])->name('bc40-browse');
-    Route::post('/browse', [Bc40Controller::class, 'store'])->name('bc40-store');
+
+    Route::middleware(['IsAdmin'])->group(function () {
+        Route::get('/approval-bc40/{id}', [Bc40Controller::class, 'approval_index'])->name('approval-bc40.index');
+        Route::put('/approval-bc40/{id}', [Bc40Controller::class, 'approval_status'])->name('approval-bc40.status');
+    });
 
     Route::middleware(['IsImportir'])->group(function () {
         Route::get('/bc40-import', [Bc40Controller::class, 'index'])->name('bc40-index');
@@ -22,6 +26,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::post('/bc40-import', [Bc40Controller::class, 'import'])->name('bc40-import');
         Route::post('/bc40-export', [Bc40Controller::class, 'export'])->name('bc40-export');
+
+        Route::post('/browse', [Bc40Controller::class, 'store'])->name('bc40-store');
+        Route::put('/browse/{id}', [Bc40Controller::class, 'update'])->name('bc40.update');
+        Route::delete('/browse/{id}', [Bc40Controller::class, 'approval_destroy'])->name('bc40.destroy');
     });
 });
 

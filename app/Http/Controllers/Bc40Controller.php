@@ -6,6 +6,7 @@ use App\Exports\BC40Export;
 use App\Http\Requests\Bc40Request;
 use App\Imports\BC40Import;
 use App\Models\Bc40;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -23,8 +24,12 @@ class Bc40Controller extends Controller
     public  function browse()
     {
         $bc40 = Bc40::orderBy('nomor_bc40', 'desc')->get();
+        $data_users = User::select('nama_perusahaan', 'npwp')->distinct()->get();
+        $auth = auth()->user();
 
-        return view('browse', compact('bc40'));
+        // dd($data_users);
+
+        return view('browse', compact('bc40', 'data_users', 'auth'));
     }
 
     public function index()
@@ -62,15 +67,10 @@ class Bc40Controller extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nomorBC40' => 'required',
-            'tanggalBC40' => 'required',
-            'npwpPengusaha' => 'required|',
-            'namaPengusaha' => 'required',
-            'npwpPengirim' => 'required|',
-            'namaPengirim' => 'required',
-            'npwpSupplier' => 'required|',
-            'namaSupplier' => 'required',
-            'uraianBarang' => 'required',
+            'tanggalBC40' => 'date',
+            'jumlahSatuan' => 'numeric',
+            'hargaPenyerahan' => 'numeric',
+            'kadarFinal' => 'numeric',
         ]);
 
         $bc40 = new Bc40;
@@ -96,6 +96,36 @@ class Bc40Controller extends Controller
         return redirect()->route('bc40-browse')->with('success', 'Data successfully saved.');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'tanggalBC40' => 'date',
+            'jumlahSatuan' => 'numeric',
+            'hargaPenyerahan' => 'numeric',
+            'kadarFinal' => 'numeric',
+        ]);
+
+        $bc40 = Bc40::findOrFail($id);
+        $bc40->nomor_bc40 = $request->nomorBC40;
+        $bc40->tanggal_bc40 = $request->tanggalBC40;
+        $bc40->npwp_pengusaha = $request->npwpPengusaha;
+        $bc40->nama_pengusaha = $request->namaPengusaha;
+        $bc40->npwp_pengirim = $request->npwpPengirim;
+        $bc40->nama_pengirim = $request->namaPengirim;
+        $bc40->npwp_supplier = $request->npwpSupplier;
+        $bc40->nama_supplier = $request->namaSupplier;
+        $bc40->uraian_barang = $request->uraianBarang;
+        $bc40->pos_tarif = $request->posTarif;
+        $bc40->jumlah_satuan = $request->jumlahSatuan;
+        $bc40->kode_satuan = $request->kodeSatuan;
+        $bc40->harga_penyerahan = $request->hargaPenyerahan;
+        $bc40->kadar_final = $request->kadarFinal;
+        $bc40->keterangan = $request->keterangan;
+        $bc40->status = null;
+        $bc40->save();
+
+        return redirect()->route('bc40-browse')->with('success', 'Data successfully updated.');
+    }
 
     public function approval_index(string $id)
     {

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_bc40')->nullable();
             $table->datetime('tanggal_bc40')->nullable();
-            $table->string('npwp_pengusaha', 16)->nullable();
+            $table->string('npwp_pengusaha', 30)->nullable();
             $table->string('nama_pengusaha', 255)->nullable();
-            $table->string('npwp_pengirim', 16)->nullable();
+            $table->string('npwp_pengirim', 30)->nullable();
             $table->string('nama_pengirim', 255)->nullable();
-            $table->string('npwp_supplier', 16)->nullable();
+            $table->string('npwp_supplier', 30)->nullable();
             $table->string('nama_supplier', 255)->nullable();
             $table->string('uraian_barang', 255)->nullable();
             $table->string('pos_tarif', 255)->nullable();
