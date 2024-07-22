@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('bc40_import', function (Blueprint $table) {
             $table->id();
             $table->string('nomor_bc40')->nullable();
-            $table->date('tanggal_bc40')->nullable();
-            $table->string('npwp_pengusaha', 15)->nullable();
+            $table->datetime('tanggal_bc40')->nullable();
+            $table->string('npwp_pengusaha', 16)->nullable();
             $table->string('nama_pengusaha', 255)->nullable();
-            $table->string('npwp_pengirim', 15)->nullable();
+            $table->string('npwp_pengirim', 16)->nullable();
             $table->string('nama_pengirim', 255)->nullable();
-            $table->string('npwp_supplier', 255)->nullable();
+            $table->string('npwp_supplier', 16)->nullable();
             $table->string('nama_supplier', 255)->nullable();
             $table->string('uraian_barang', 255)->nullable();
             $table->string('pos_tarif', 255)->nullable();
@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('kode_satuan')->nullable();
             $table->bigInteger('harga_penyerahan')->nullable();
             $table->decimal('kadar_final', 5, 2)->nullable();
+            $table->string('keterangan', 255)->nullable();
             $table->string('keterangan', 255)->nullable();
             $table->timestamps();
         });
