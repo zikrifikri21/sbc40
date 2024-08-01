@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class IsAdmin
@@ -17,7 +18,7 @@ class IsAdmin
     {
         $level = Auth::user()->user_level->id_user_level;
 
-        if($level != 11) {
+        if ($level != 1 && $level != 11) {
             return redirect('/dashboard')->with('error', 'Oupss... You are not authorized to access this page');
         }
 

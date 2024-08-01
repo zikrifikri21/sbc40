@@ -14,6 +14,14 @@ class Bc40 extends Model
     protected $guarded = ['id'];
     protected $table = 'bc40_import';
 
+    protected $casts = [
+        'status' => 'string',
+    ];
+
+    protected $fillable = [
+        'status',
+    ];
+
     public static function boot(): void
     {
         parent::boot();
